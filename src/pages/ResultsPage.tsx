@@ -125,105 +125,60 @@ const ResultsPage = () => {
           )}
 
           {!isLoading && aiAnalysis && (
-            <div className="space-y-8 mb-8">
-              {/* Introduction */}
-              {aiAnalysis.introduction && (
-                <div className="glass-card p-8 rounded-2xl animate-fade-in">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="w-5 h-5 text-primary" />
-                    <h2 className="text-2xl font-bold">Your Personality Profile</h2>
-                  </div>
-                  <div className="prose prose-invert max-w-none">
-                    <p className="text-foreground/90 leading-relaxed whitespace-pre-wrap">
-                      {aiAnalysis.introduction}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Raw content fallback */}
-              {aiAnalysis.rawContent && !aiAnalysis.introduction && (
-                <div className="glass-card p-8 rounded-2xl animate-fade-in">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="w-5 h-5 text-primary" />
-                    <h2 className="text-2xl font-bold">Your Personality Analysis</h2>
-                  </div>
-                  <div className="prose prose-invert max-w-none">
-                    <p className="text-foreground/90 leading-relaxed whitespace-pre-wrap">
-                      {aiAnalysis.rawContent}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Strengths */}
+            <div className="space-y-6 mb-8">
+              {/* Strengths as visual cards */}
               {aiAnalysis.strengths && aiAnalysis.strengths.length > 0 && (
-                <div className="glass-card p-8 rounded-2xl animate-fade-in">
-                  <h2 className="text-2xl font-bold mb-6">Your Superpowers 💪</h2>
-                  <ul className="space-y-3">
-                    {aiAnalysis.strengths.map((strength, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <span className="text-primary text-xl">✓</span>
-                        <span className="text-foreground/90">{strength}</span>
-                      </li>
+                <div className="animate-fade-in">
+                  <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <Sparkles className="w-6 h-6 text-primary" />
+                    Your Superpowers
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {aiAnalysis.strengths.slice(0, 6).map((strength, index) => (
+                      <div key={index} className="glass-card p-4 rounded-xl hover:scale-105 transition-transform">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
+                            <span className="text-white font-bold">{index + 1}</span>
+                          </div>
+                          <p className="text-sm font-medium">{strength}</p>
+                        </div>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
 
-              {/* Career Paths */}
+              {/* Career Paths as icon cards */}
               {aiAnalysis.careerPaths && aiAnalysis.careerPaths.length > 0 && (
-                <div className="glass-card p-8 rounded-2xl animate-fade-in">
-                  <h2 className="text-2xl font-bold mb-6">Ideal Career Paths 🚀</h2>
-                  <div className="space-y-4">
+                <div className="animate-fade-in">
+                  <h2 className="text-2xl font-bold mb-4">Ideal Career Paths</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {aiAnalysis.careerPaths.map((career, index) => (
-                      <div key={index} className="border-l-4 border-primary pl-4">
-                        <h3 className="font-bold text-lg mb-1">{career.title}</h3>
-                        <p className="text-muted-foreground">{career.description}</p>
+                      <div key={index} className="glass-card p-6 rounded-xl text-center hover:scale-105 transition-transform">
+                        <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                          <span className="text-2xl">🚀</span>
+                        </div>
+                        <h3 className="font-bold text-lg mb-2">{career.title}</h3>
+                        <p className="text-sm text-muted-foreground line-clamp-3">{career.description}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Learning Recommendations */}
+              {/* Learning Recommendations as badge grid */}
               {aiAnalysis.learningRecommendations && aiAnalysis.learningRecommendations.length > 0 && (
-                <div className="glass-card p-8 rounded-2xl animate-fade-in">
-                  <h2 className="text-2xl font-bold mb-6">Learning & Growth 📚</h2>
-                  <div className="space-y-6">
-                    {aiAnalysis.learningRecommendations.map((rec, index) => (
-                      <div key={index}>
-                        <h3 className="font-bold text-primary mb-3">{rec.category}</h3>
-                        <ul className="space-y-2 ml-4">
-                          {rec.items?.map((item, itemIndex) => (
-                            <li key={itemIndex} className="flex items-start gap-2">
-                              <span className="text-secondary">•</span>
-                              <span className="text-foreground/90">{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
+                <div className="glass-card p-6 rounded-2xl animate-fade-in">
+                  <h2 className="text-xl font-bold mb-4">Growth Areas</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {aiAnalysis.learningRecommendations.map((rec, index) => 
+                      rec.items?.slice(0, 3).map((item, itemIndex) => (
+                        <div key={`${index}-${itemIndex}`} className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm">
+                          {item.length > 40 ? item.substring(0, 40) + '...' : item}
+                        </div>
+                      ))
+                    )}
                   </div>
-                </div>
-              )}
-
-              {/* Team Dynamics */}
-              {aiAnalysis.teamDynamics && (
-                <div className="glass-card p-8 rounded-2xl animate-fade-in">
-                  <h2 className="text-2xl font-bold mb-4">Team Dynamics 👥</h2>
-                  <p className="text-foreground/90 leading-relaxed whitespace-pre-wrap">
-                    {aiAnalysis.teamDynamics}
-                  </p>
-                </div>
-              )}
-
-              {/* Closing */}
-              {aiAnalysis.closing && (
-                <div className="glass-card p-8 rounded-2xl text-center animate-fade-in bg-gradient-to-br from-primary/10 to-secondary/10">
-                  <p className="text-lg text-foreground/90 leading-relaxed italic">
-                    "{aiAnalysis.closing}"
-                  </p>
                 </div>
               )}
             </div>
